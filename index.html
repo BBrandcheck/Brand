@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Brand</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(
+        135deg,
+        rgba(64, 224, 208, 0.7),
+        rgba(0, 191, 255, 0.9),
+        rgba(0, 128, 255, 0.8)
+      );
+      background-size: 400% 400%;
+      animation: waveBackground 15s ease infinite;
+      position: relative;
+    }
+
+    @keyframes waveBackground {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .text-header {
+      position: absolute;
+      top: 28%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 3;
+      color: rgba(0, 60, 255, 0.5);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .text-header .line1 {
+      font-size: 48px;
+      margin: 0;
+      letter-spacing: 4px;
+      white-space: nowrap;
+    }
+
+    .text-header .this-word {
+      display: inline-block;
+    }
+
+    .text-header .brand-word {
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    .text-header .line2 {
+      font-size: 48px;
+      margin: 0;
+      position: relative;
+      margin-left: -250px; /* ← تم التعديل هنا */
+      color: rgba(0, 60, 255, 0.5);
+      user-select: text;
+      pointer-events: auto;
+      white-space: nowrap;
+    }
+
+    #dynamicText {
+      display: inline-block;
+      margin-left: 10px;
+      color: #ff6666;
+      font-size: 48px;
+      font-weight: normal;
+      user-select: text;
+      pointer-events: auto;
+    }
+
+    .center-container {
+      position: absolute;
+      top: 65%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .watermark {
+      font-size: 200px;
+      font-weight: bold;
+      color: rgba(0, 60, 255, 0.2);
+      transform: translateY(40px);
+    }
+
+    .big-check {
+      font-size: 200px;
+      font-weight: bold;
+      color: rgba(0, 60, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="text-header">
+    <h1 class="line1">
+      <span class="this-word">This</span>
+      <span class="brand-word">Brand</span>
+    </h1>
+    <h1 class="line2">
+      Is<span id="dynamicText"></span>
+    </h1>
+  </div>
+
+  <div class="center-container">
+    <div class="watermark">B</div>
+    <div class="big-check">✔</div>
+  </div>
+
+  <script>
+    function getIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+
+    const textsById = {
+      'nfc': ' Near Field Communication',
+      'tool1': ' Tool One',
+      'tool2': ' Tool Two',
+      'example': ' Example Text',
+    };
+
+    function updateDynamicText() {
+      const id = getIdFromUrl();
+      const dynamicTextElem = document.getElementById('dynamicText');
+      if (id && textsById[id]) {
+        dynamicTextElem.textContent = textsById[id];
+      } else {
+        dynamicTextElem.textContent = '';
+      }
+    }
+
+    updateDynamicText();
+  </script>
+
+</body>
+</html>
