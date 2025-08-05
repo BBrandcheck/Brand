@@ -130,19 +130,12 @@
       return params.get('id');
     }
 
-    const textsById = {
-      'nfc': ' Near Field Communication',
-      'tool1': ' Tool One',
-      'tool2': ' Tool Two',
-      'example': ' Example Text',
-      'test': ' test'  // ← أضفت هذه القيمة
-    };
-
     function updateDynamicText() {
       const id = getIdFromUrl();
       const dynamicTextElem = document.getElementById('dynamicText');
-      if (id && textsById[id]) {
-        dynamicTextElem.textContent = textsById[id];
+      if (id) {
+        // هنا نعرض النص مباشرة بدون فلترة
+        dynamicTextElem.textContent = ' ' + id;
       } else {
         dynamicTextElem.textContent = '';
       }
