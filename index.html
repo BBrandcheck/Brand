@@ -66,9 +66,9 @@
 
     #dynamicText {
       display: block;
-      margin-top: 160px; /* ثمان أسطر تقريباً */
-      color: #800000;   /* أحمر غامق أكثر */
-      font-size: 52px;  /* كبير */
+      margin-top: 160px;
+      color: #800000;
+      font-size: 52px;
       font-weight: bold;
       user-select: text;
       pointer-events: auto;
@@ -121,6 +121,42 @@
   </div>
 
   <script>
+    // ----------------------------------------
+    // 1️⃣ قائمة الشرائح المسموح بها (UID)
+    const allowedUIDs = ["04A2243B112233"]; // ضع UID الخاص بشريحتك هنا
+
+    // ----------------------------------------
+    // 2️⃣ دالة لقراءة NFC والتحقق من UID
+    async function checkNFC() {
+      if ('NDEFReader' in window) {
+        try {
+          const ndef = new NDEFReader();
+          await ndef.scan();
+          alert("قرب الشريحة من الهاتف لقراءتها...");
+
+          ndef.onreading = event => {
+            const uid = event.serialNumber;
+            console.log("UID الشريحة:", uid);
+
+            if (allowedUIDs.includes(uid)) {
+              alert("✅ شريحة مسموح بها. يمكنك مشاهدة الموقع.");
+              updateDynamicText(); // تابع عرض النص الديناميكي
+            } else {
+              alert("❌ هذه الشريحة غير مصرح بها.");
+              document.body.innerHTML = "<h1 style='text-align:center;margin-top:50px;color:red;'>غير مصرح لك بالدخول</h1>";
+            }
+          };
+        } catch (error) {
+          console.error("خطأ في قراءة NFC:", error);
+          alert("المتصفح لا يدعم NFC أو تم رفض الإذن.");
+        }
+      } else {
+        alert("متصفحك لا يدعم Web NFC. استخدم Chrome على أندرويد.");
+      }
+    }
+
+    // ----------------------------------------
+    // 3️⃣ دالة عرض النص الديناميكي كما في الكود الأصلي
     function getIdFromUrl() {
       const params = new URLSearchParams(window.location.search);
       return params.get('id');
@@ -135,7 +171,7 @@
         words.forEach((word, index) => {
           formattedText += word + " ";
           if ((index + 1) % 3 === 0) {
-            formattedText += "<br>"; // كل 3 كلمات ينزل لسطر
+            formattedText += "<br>";
           }
         });
         dynamicTextElem.innerHTML = formattedText.trim();
@@ -144,7 +180,9 @@
       }
     }
 
-    updateDynamicText();
+    // ----------------------------------------
+    // 4️⃣ عند تحميل الصفحة نبدأ التحقق عبر NFC
+    checkNFC();
   </script>
 
 </body>
