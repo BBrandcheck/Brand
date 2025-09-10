@@ -18,12 +18,19 @@
       background-size: 400% 400%;
       animation: waveBackground 15s ease infinite;
       position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     @keyframes waveBackground {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
+    }
+
+    .text-header, .center-container {
+      display: none; /* مخفي افتراضيًا حتى تمرر شريحة NFC */
     }
 
     .text-header {
@@ -100,9 +107,18 @@
       font-weight: bold;
       color: rgba(0, 60, 255, 0.2);
     }
+
+    #nfcMessage {
+      color: #000;
+      font-size: 32px;
+      font-weight: bold;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
+
+  <div id="nfcMessage">انتظر لمس شريحة NFC المصرح بها...</div>
 
   <div class="text-header">
     <h1 class="line1">
@@ -121,42 +137,38 @@
   </div>
 
   <script>
-    // ----------------------------------------
-    // 1️⃣ قائمة الشرائح المسموح بها (UID)
-    const allowedUIDs = ["04:3B:7F:A2:A5:1C:90"]; // ضع UID الخاص بشريحتك هنا
+    // قائمة الأرقام التسلسلية المصرح بها
+    const authorizedUIDs = [
+        "043B7FA2A51C90" // ضع أرقام الشرائح المصرح بها هنا
+   ];
 
-    // ----------------------------------------
-    // 2️⃣ دالة لقراءة NFC والتحقق من UID
-    async function checkNFC() {
+    async function scanNFC() {
       if ('NDEFReader' in window) {
         try {
           const ndef = new NDEFReader();
           await ndef.scan();
-          alert("قرب الشريحة من الهاتف لقراءتها...");
 
           ndef.onreading = event => {
-            const uid = event.serialNumber;
-            console.log("UID الشريحة:", uid);
+            const uid = Array.from(event.serialNumber || []).map(b => b.toString(16).padStart(2,'0')).join('').toUpperCase();
 
-            if (allowedUIDs.includes(uid)) {
-              alert("✅ شريحة مسموح بها. يمكنك مشاهدة الموقع.");
-              updateDynamicText(); // تابع عرض النص الديناميكي
+            if (authorizedUIDs.includes(uid)) {
+              // السماح بالدخول
+              document.getElementById('nfcMessage').style.display = 'none';
+              document.querySelector('.text-header').style.display = 'block';
+              document.querySelector('.center-container').style.display = 'flex';
+              updateDynamicText();
             } else {
-              alert("❌ هذه الشريحة غير مصرح بها.");
-              document.body.innerHTML = "<h1 style='text-align:center;margin-top:50px;color:red;'>غير مصرح لك بالدخول</h1>";
+              document.getElementById('nfcMessage').textContent = "شريحة غير مصرح بها! الوصول مرفوض.";
             }
           };
         } catch (error) {
-          console.error("خطأ في قراءة NFC:", error);
-          alert("المتصفح لا يدعم NFC أو تم رفض الإذن.");
+          document.getElementById('nfcMessage').textContent = `خطأ أثناء مسح NFC: ${error}`;
         }
       } else {
-        alert("متصفحك لا يدعم Web NFC. استخدم Chrome على أندرويد.");
+        document.getElementById('nfcMessage').textContent = "جهازك لا يدعم NFC أو المتصفح لا يدعم Web NFC.";
       }
     }
 
-    // ----------------------------------------
-    // 3️⃣ دالة عرض النص الديناميكي كما في الكود الأصلي
     function getIdFromUrl() {
       const params = new URLSearchParams(window.location.search);
       return params.get('id');
@@ -180,13 +192,8 @@
       }
     }
 
-    // ----------------------------------------
-    // 4️⃣ عند تحميل الصفحة نبدأ التحقق عبر NFC
-    checkNFC();
+    scanNFC();
   </script>
 
 </body>
 </html>
-
-
-
