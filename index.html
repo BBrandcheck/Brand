@@ -66,9 +66,9 @@
 
     #dynamicText {
       display: block;
-      margin-top: 160px; 
-      color: #800000; 
-      font-size: 52px; 
+      margin-top: 160px; /* ثمان أسطر تقريباً */
+      color: #800000;   /* أحمر غامق أكثر */
+      font-size: 52px;  /* كبير */
       font-weight: bold;
       user-select: text;
       pointer-events: auto;
@@ -111,7 +111,7 @@
     </h1>
     <h1 class="line2">
       Is
-      <span id="dynamicText">امسح شريحة NFC</span>
+      <span id="dynamicText"></span>
     </h1>
   </div>
 
@@ -121,7 +121,6 @@
   </div>
 
   <script>
-    // هذا الكود للحفاظ على النص الديناميكي القديم
     function getIdFromUrl() {
       const params = new URLSearchParams(window.location.search);
       return params.get('id');
@@ -136,49 +135,16 @@
         words.forEach((word, index) => {
           formattedText += word + " ";
           if ((index + 1) % 3 === 0) {
-            formattedText += "<br>";
+            formattedText += "<br>"; // كل 3 كلمات ينزل لسطر
           }
         });
         dynamicTextElem.innerHTML = formattedText.trim();
       } else {
-        dynamicTextElem.textContent = 'امسح شريحة NFC';
+        dynamicTextElem.textContent = '';
       }
     }
 
     updateDynamicText();
-  </script>
-
-  <!-- ===== كود التحقق من UID الشريحة ===== -->
-  <script>
-    // اخفاء محتوى الصفحة مؤقتاً حتى يتم التحقق
-    document.body.style.display = "none";
-
-    async function checkNFC() {
-      try {
-        const reader = new NDEFReader();
-        await reader.scan();
-
-        reader.onreading = (event) => {
-          const uid = event.serialNumber.replace(/:/g,"").toUpperCase(); // تنظيف UID
-          console.log("UID:", uid);
-
-          // قائمة الـUID المسموح لها
-          const allowedUIDs = ["043B7FA2A51C90"];
-
-          if (allowedUIDs.includes(uid)) {
-            // إذا الـUID صحيح، اعرض الصفحة الأصلية
-            document.body.style.display = "block";
-          } else {
-            // إذا غير مسموح، عرض رسالة رفض
-            document.body.innerHTML = "<h1 style='text-align:center;margin-top:50px;'>🚫 شريحة غير مصرح بها</h1>";
-          }
-        };
-      } catch (err) {
-        document.body.innerHTML = "<h1 style='text-align:center;margin-top:50px;'>⚠️ جهازك لا يدعم Web NFC</h1>";
-      }
-    }
-
-    checkNFC();
   </script>
 
 </body>
