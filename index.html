@@ -18,19 +18,12 @@
       background-size: 400% 400%;
       animation: waveBackground 15s ease infinite;
       position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
     @keyframes waveBackground {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
-    }
-
-    .text-header, .center-container {
-      display: none; /* مخفي افتراضيًا حتى تمرر شريحة NFC */
     }
 
     .text-header {
@@ -73,9 +66,9 @@
 
     #dynamicText {
       display: block;
-      margin-top: 160px;
-      color: #800000;
-      font-size: 52px;
+      margin-top: 160px; /* ثمان أسطر تقريباً */
+      color: #800000;   /* أحمر غامق أكثر */
+      font-size: 52px;  /* كبير */
       font-weight: bold;
       user-select: text;
       pointer-events: auto;
@@ -107,18 +100,9 @@
       font-weight: bold;
       color: rgba(0, 60, 255, 0.2);
     }
-
-    #nfcMessage {
-      color: #000;
-      font-size: 32px;
-      font-weight: bold;
-      text-align: center;
-    }
   </style>
 </head>
 <body>
-
-  <div id="nfcMessage">انتظر لمس شريحة NFC المصرح بها...</div>
 
   <div class="text-header">
     <h1 class="line1">
@@ -137,38 +121,6 @@
   </div>
 
   <script>
-    // قائمة الأرقام التسلسلية المصرح بها
-    const authorizedUIDs = [
-        "043B7FA2A51C90" // ضع أرقام الشرائح المصرح بها هنا
-   ];
-
-    async function scanNFC() {
-      if ('NDEFReader' in window) {
-        try {
-          const ndef = new NDEFReader();
-          await ndef.scan();
-
-          ndef.onreading = event => {
-            const uid = Array.from(event.serialNumber || []).map(b => b.toString(16).padStart(2,'0')).join('').toUpperCase();
-
-            if (authorizedUIDs.includes(uid)) {
-              // السماح بالدخول
-              document.getElementById('nfcMessage').style.display = 'none';
-              document.querySelector('.text-header').style.display = 'block';
-              document.querySelector('.center-container').style.display = 'flex';
-              updateDynamicText();
-            } else {
-              document.getElementById('nfcMessage').textContent = "شريحة غير مصرح بها! الوصول مرفوض.";
-            }
-          };
-        } catch (error) {
-          document.getElementById('nfcMessage').textContent = `خطأ أثناء مسح NFC: ${error}`;
-        }
-      } else {
-        document.getElementById('nfcMessage').textContent = "جهازك لا يدعم NFC أو المتصفح لا يدعم Web NFC.";
-      }
-    }
-
     function getIdFromUrl() {
       const params = new URLSearchParams(window.location.search);
       return params.get('id');
@@ -183,7 +135,7 @@
         words.forEach((word, index) => {
           formattedText += word + " ";
           if ((index + 1) % 3 === 0) {
-            formattedText += "<br>";
+            formattedText += "<br>"; // كل 3 كلمات ينزل لسطر
           }
         });
         dynamicTextElem.innerHTML = formattedText.trim();
@@ -192,7 +144,7 @@
       }
     }
 
-    scanNFC();
+    updateDynamicText();
   </script>
 
 </body>
