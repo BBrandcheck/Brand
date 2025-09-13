@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Brand</title>
@@ -26,6 +26,7 @@
       100% { background-position: 0% 50%; }
     }
 
+    /* شاشة التحقق */
     .nfc-check {
       position: absolute;
       top: 50%;
@@ -65,6 +66,7 @@
       background: #002db3;
     }
 
+    /* الواجهة الأصلية (مخفية بالبداية) */
     .main-content {
       display: none;
     }
@@ -174,38 +176,20 @@
     </div>
   </div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <script>
-    // إعداد Firebase
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      databaseURL: "https://nfc-serial-number-default-rtdb.firebaseio.com/",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    let allowedSerials = [];
-
-    // جلب قائمة الأرقام المسموح بها من Firebase
-    db.ref("allowedSerials").once("value").then(snapshot => {
-      if(snapshot.exists()) {
-        allowedSerials = Object.values(snapshot.val()); // تأخذ القيم كـ array
-        console.log("Allowed serials loaded:", allowedSerials);
-      }
-    });
+    // قائمة أرقام السيريال المسموح بها
+    const allowedSerials = [
+      "04:3B:7F:A2:A5:1C:90",
+      "04:3B:82:A2:A5:1C:90",
+      // أضف أي أرقام أخرى هنا
+    ];
 
     function checkSerial() {
       const input = document.getElementById("serialInput").value.trim();
-      if(allowedSerials.includes(input)) {
+      if (allowedSerials.includes(input)) {
+        // إخفاء شاشة التحقق
         document.getElementById("checkScreen").style.display = "none";
+        // إظهار الصفحة الأصلية
         document.getElementById("mainContent").style.display = "block";
       } else {
         alert("❌ الرقم غير صحيح!");
