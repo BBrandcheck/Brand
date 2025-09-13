@@ -83,68 +83,23 @@
       user-select: none;
     }
 
-    .text-header .line1 {
-      font-size: 48px;
-      margin: 0;
-      letter-spacing: 4px;
-      white-space: nowrap;
-    }
-
-    .text-header .this-word {
-      display: inline-block;
-    }
-
-    .text-header .brand-word {
-      display: inline-block;
-      margin-left: 10px;
-    }
-
-    .text-header .line2 {
-      font-size: 48px;
-      margin: 0;
-      position: relative;
-      color: rgba(0, 60, 255, 0.5);
-      user-select: text;
-      pointer-events: auto;
-      white-space: nowrap;
-    }
+    .text-header .line1 { font-size: 48px; margin: 0; letter-spacing: 4px; white-space: nowrap; }
+    .text-header .this-word { display: inline-block; }
+    .text-header .brand-word { display: inline-block; margin-left: 10px; }
+    .text-header .line2 { font-size: 48px; margin: 0; position: relative; color: rgba(0, 60, 255, 0.5); user-select: text; pointer-events: auto; white-space: nowrap; }
 
     #dynamicText {
-      display: block;
-      margin-top: 160px;
-      color: #800000;
-      font-size: 52px;
-      font-weight: bold;
-      user-select: text;
-      pointer-events: auto;
-      line-height: 1.6;
-      text-align: center;
+      display: block; margin-top: 160px; color: #800000; font-size: 52px; font-weight: bold;
+      user-select: text; pointer-events: auto; line-height: 1.6; text-align: center;
     }
 
     .center-container {
-      position: absolute;
-      top: 65%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
-      align-items: flex-start;
-      gap: 20px;
-      z-index: 2;
-      pointer-events: none;
+      position: absolute; top: 65%; left: 50%; transform: translate(-50%, -50%);
+      display: flex; align-items: flex-start; gap: 20px; z-index: 2; pointer-events: none;
     }
 
-    .watermark {
-      font-size: 200px;
-      font-weight: bold;
-      color: rgba(0, 60, 255, 0.2);
-      transform: translateY(40px);
-    }
-
-    .big-check {
-      font-size: 200px;
-      font-weight: bold;
-      color: rgba(0, 60, 255, 0.2);
-    }
+    .watermark { font-size: 200px; font-weight: bold; color: rgba(0, 60, 255, 0.2); transform: translateY(40px); }
+    .big-check { font-size: 200px; font-weight: bold; color: rgba(0, 60, 255, 0.2); }
   </style>
 </head>
 <body>
@@ -192,18 +147,18 @@
       appId: "YOUR_APP_ID"
     };
 
-    // تهيئة Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // التحقق من الرقم
     function checkSerial() {
       const input = document.getElementById("serialInput").value.trim();
       const ref = database.ref("allowedSerials");
 
       ref.once("value").then(snapshot => {
-        const allowedSerials = snapshot.val();
-        if (allowedSerials && allowedSerials.includes(input)) {
+        const data = snapshot.val();
+        // تحويل المفاتيح إلى مصفوفة أرقام مسموح بها
+        const allowedSerials = Object.values(data || {}).map(String);
+        if (allowedSerials.includes(input)) {
           document.getElementById("checkScreen").style.display = "none";
           document.getElementById("mainContent").style.display = "block";
         } else {
