@@ -219,12 +219,10 @@
     function checkSerial() {
       const input = document.getElementById("serialInput").value.trim();
       if (allowedSerials.includes(input)) {
-        // إخفاء شاشة التحقق
         document.getElementById("checkScreen").style.display = "none";
-        // إظهار الصفحة الأصلية
         document.getElementById("mainContent").style.display = "block";
       } else {
-        alert("❌ الرقم غير صحيح!");
+        alert("❌  Incorrect serial number !");
       }
     }
 
@@ -256,4 +254,5 @@
 
 </body>
 </html>
+
 
