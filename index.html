@@ -5,11 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Brand</title>
   <style>
-    body {
+    html, body {
       margin: 0;
-      height: 100vh;
-      overflow: hidden;
+      padding: 0;
+      width: 100%;
+      height: 100%;
       font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    body {
       background: linear-gradient(
         135deg,
         rgba(64, 224, 208, 0.7),
@@ -19,6 +24,7 @@
       background-size: 400% 400%;
       animation: waveBackground 15s ease infinite;
       position: relative;
+      min-height: 100%;
     }
 
     @keyframes waveBackground {
@@ -27,57 +33,50 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* الواجهة الأصلية */
     .main-content {
       display: block;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      box-sizing: border-box;
     }
 
     .text-header {
       position: absolute;
-      top: 25%;
+      top: 20%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
       text-align: center;
-      z-index: 3;
       color: rgba(0, 60, 255, 0.5);
       pointer-events: none;
       user-select: none;
+      width: 90%;
     }
 
     .text-header .line1 {
-      font-size: 48px;
+      font-size: 6vw;
       margin: 0;
-      letter-spacing: 4px;
+      letter-spacing: 0.2em;
       white-space: nowrap;
     }
 
-    .text-header .this-word {
-      display: inline-block;
-    }
-
-    .text-header .brand-word {
-      display: inline-block;
-      margin-left: 10px;
-    }
-
     .text-header .line2 {
-      font-size: 48px;
+      font-size: 6vw;
       margin: 0;
-      position: relative;
       color: rgba(0, 60, 255, 0.5);
       user-select: text;
       pointer-events: auto;
       white-space: nowrap;
     }
 
-    /* النص الأحمر أسفل الصفحة */
+    /* النص الأحمر في منتصف الصفحة أسفل العنوان */
     #dynamicText {
       position: absolute;
-      bottom: 20px; /* مسافة من أسفل الشاشة */
+      top: 35%; /* أسفل العنوان */
       left: 50%;
       transform: translateX(-50%);
       color: #800000;
-      font-size: 48px;
+      font-size: 5vw;
       font-weight: bold;
       user-select: text;
       pointer-events: auto;
@@ -89,58 +88,54 @@
 
     .center-container {
       position: absolute;
-      top: 60%;
+      top: 55%;
       left: 50%;
       transform: translate(-50%, -50%);
       display: flex;
       align-items: center;
-      gap: 20px;
-      z-index: 2;
+      gap: 3vw;
       pointer-events: none;
     }
 
     .watermark {
-      font-size: 150px;
+      font-size: 15vw;
       font-weight: bold;
       color: rgba(0, 60, 255, 0.2);
-      transform: translateY(20px);
+      transform: translateY(1vw);
     }
 
     .big-check {
-      font-size: 150px;
+      font-size: 15vw;
       font-weight: bold;
       color: rgba(0, 60, 255, 0.2);
     }
 
-    /* تحسينات للهواتف */
     @media only screen and (max-width: 480px) {
       .text-header .line1,
       .text-header .line2 {
-        font-size: 28px;
-        letter-spacing: 2px;
+        font-size: 7vw;
+        letter-spacing: 0.1em;
       }
 
       #dynamicText {
-        font-size: 32px;
-        bottom: 15px;
+        font-size: 6vw;
+        top: 38%;
       }
 
       .center-container {
         flex-direction: column;
-        gap: 10px;
-        top: 65%;
+        gap: 5vw;
       }
 
       .watermark,
       .big-check {
-        font-size: 100px;
+        font-size: 18vw;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- الصفحة الأصلية -->
   <div class="main-content" id="mainContent">
     <div class="text-header">
       <h1 class="line1">
@@ -152,13 +147,12 @@
       </h1>
     </div>
 
+    <span id="dynamicText"></span>
+
     <div class="center-container">
       <div class="watermark">B</div>
       <div class="big-check">✔</div>
     </div>
-
-    <!-- النص الأحمر أسفل الصفحة -->
-    <span id="dynamicText"></span>
   </div>
 
   <script>
