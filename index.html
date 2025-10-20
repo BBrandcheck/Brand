@@ -27,54 +27,14 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* شاشة التحقق */
-    .nfc-check {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      z-index: 10;
-    }
-
-    .nfc-check p {
-      font-size: 18px;
-      color: #000;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-
-    .nfc-check input {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 6px;
-      border: 1px solid #333;
-      width: 250px;
-      margin-bottom: 10px;
-    }
-
-    .nfc-check button {
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      background: #0040ff;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    .nfc-check button:hover {
-      background: #002db3;
-    }
-
-    /* الواجهة الأصلية (مخفية بالبداية) */
+    /* الواجهة الأصلية */
     .main-content {
-      display: none;
+      display: block;
     }
 
     .text-header {
       position: absolute;
-      top: 28%;
+      top: 25%;
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
@@ -110,57 +70,46 @@
       white-space: nowrap;
     }
 
-    /* رفع النص الأحمر (#dynamicText) أعلى قليلاً */
     #dynamicText {
       display: block;
-      margin-top: 60px; /* كان 160px سابقاً، الآن أعلى بمقدار تقريباً 3 أسطر */
+      margin-top: 40px;
       color: #800000;
-      font-size: 52px;
+      font-size: 48px;
       font-weight: bold;
       user-select: text;
       pointer-events: auto;
-      line-height: 1.6;
+      line-height: 1.4;
       text-align: center;
+      word-wrap: break-word;
     }
 
     .center-container {
       position: absolute;
-      top: 65%;
+      top: 60%;
       left: 50%;
       transform: translate(-50%, -50%);
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 20px;
       z-index: 2;
       pointer-events: none;
     }
 
     .watermark {
-      font-size: 200px;
+      font-size: 150px;
       font-weight: bold;
       color: rgba(0, 60, 255, 0.2);
-      transform: translateY(40px);
+      transform: translateY(20px);
     }
 
     .big-check {
-      font-size: 200px;
+      font-size: 150px;
       font-weight: bold;
       color: rgba(0, 60, 255, 0.2);
     }
 
-    /* إضافات لتناسب الهاتف */
+    /* تحسينات للهواتف */
     @media only screen and (max-width: 480px) {
-      .nfc-check input {
-        width: 180px;
-        font-size: 14px;
-        padding: 8px;
-      }
-
-      .nfc-check button {
-        font-size: 14px;
-        padding: 8px 16px;
-      }
-
       .text-header .line1,
       .text-header .line2 {
         font-size: 28px;
@@ -169,33 +118,25 @@
 
       #dynamicText {
         font-size: 32px;
-        margin-top: 50px; /* مناسب للهواتف */
+        margin-top: 30px;
       }
 
       .center-container {
         flex-direction: column;
         gap: 10px;
-        top: 70%;
+        top: 65%;
       }
 
       .watermark,
       .big-check {
-        font-size: 120px;
+        font-size: 100px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- شاشة إدخال الرقم -->
-  <div class="nfc-check" id="checkScreen">
-    <p>Read the NFC sticker through the NFC Tools app, extract the serial number, put it here, and then check</p>
-    <input type="text" id="serialInput" placeholder="Enter serial number" />
-    <br>
-    <button onclick="checkSerial()">Check</button>
-  </div>
-
-  <!-- الصفحة الأصلية (مخفية بالبداية) -->
+  <!-- الصفحة الأصلية -->
   <div class="main-content" id="mainContent">
     <div class="text-header">
       <h1 class="line1">
@@ -215,17 +156,6 @@
   </div>
 
   <script>
-    const allowedSerials = [ "04:3B:7F:A2:A5:1C:90","04:3B:82:A2:A5:1C:90","04:3B:7E:A2:A5:1C:90" ];
-    function checkSerial() {
-      const input = document.getElementById("serialInput").value.trim();
-      if (allowedSerials.includes(input)) {
-        document.getElementById("checkScreen").style.display = "none";
-        document.getElementById("mainContent").style.display = "block";
-      } else {
-        alert("❌  Incorrect serial number !");
-      }
-    }
-
     function getIdFromUrl() {
       const params = new URLSearchParams(window.location.search);
       return params.get('id');
@@ -254,4 +184,3 @@
 
 </body>
 </html>
-
