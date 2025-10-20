@@ -70,9 +70,12 @@
       white-space: nowrap;
     }
 
+    /* النص الأحمر أسفل الصفحة */
     #dynamicText {
-      display: block;
-      margin-top: 40px;
+      position: absolute;
+      bottom: 20px; /* مسافة من أسفل الشاشة */
+      left: 50%;
+      transform: translateX(-50%);
       color: #800000;
       font-size: 48px;
       font-weight: bold;
@@ -81,6 +84,7 @@
       line-height: 1.4;
       text-align: center;
       word-wrap: break-word;
+      max-width: 90%;
     }
 
     .center-container {
@@ -118,7 +122,7 @@
 
       #dynamicText {
         font-size: 32px;
-        margin-top: 30px;
+        bottom: 15px;
       }
 
       .center-container {
@@ -145,7 +149,6 @@
       </h1>
       <h1 class="line2">
         Is
-        <span id="dynamicText"></span>
       </h1>
     </div>
 
@@ -153,6 +156,9 @@
       <div class="watermark">B</div>
       <div class="big-check">✔</div>
     </div>
+
+    <!-- النص الأحمر أسفل الصفحة -->
+    <span id="dynamicText"></span>
   </div>
 
   <script>
